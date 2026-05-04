@@ -106,13 +106,13 @@ export LIBPATHS	:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib)
 #---------------------------------------------------------------------------------
 all: $(BUILD)
 
-export MAKEROM := $(CURDIR)/makerom
+# export MAKEROM := $(CURDIR)/makerom
 
-ifeq ($(wildcard $(MAKEROM)),)
-@echo $(CURDIR)
-@ls
-$(error $(CURDIR))
-endif
+# ifeq ($(wildcard $(MAKEROM)),)
+# @echo $(CURDIR)
+# @ls
+# $(error $(CURDIR))
+# endif
 
 $(BUILD):
 	@[ -d $@ ] || mkdir -p $@
@@ -136,8 +136,7 @@ DEPENDS	:=	$(OFILES:.o=.d)
 all	:	$(OUTPUT).cxi
 
 $(OUTPUT).cxi	:	$(OUTPUT).elf
-	@chmod 777 $(MAKEROM)
-	@$(MAKEROM) -f ncch -rsf $(OUTPUT).rsf -nocodepadding -o $@ -elf $<
+	@makerom -f ncch -rsf $(OUTPUT).rsf -nocodepadding -o $@ -elf $<
 	@echo built ... $(notdir $@)
 
 $(OUTPUT).elf	:	$(OFILES)
