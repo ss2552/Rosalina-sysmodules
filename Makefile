@@ -7,6 +7,8 @@ ifeq ($(strip $(DEVKITARM)),)
 $(error "Please set DEVKITARM in your environment. export DEVKITARM=<path to>devkitARM")
 endif
 
+export PATH := $(PATH):$(CURDIR)/makerom
+
 TOPDIR ?= $(CURDIR)
 include $(DEVKITARM)/3ds_rules
 
@@ -120,9 +122,7 @@ clean:
 else
 .PHONY:	all
 
-DEPENDS	:=	$(OFILES:.o=.d)
-
-export PATH := $(PATH):$(TOPDIR)/makerom
+DEPENDS	:=	$(OFILES:.o=.d
 
 #---------------------------------------------------------------------------------
 # main targets
