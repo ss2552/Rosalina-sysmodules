@@ -2,6 +2,7 @@
 .SUFFIXES:
 #---------------------------------------------------------------------------------
 
+
 ifeq ($(strip $(DEVKITARM)),)
 $(error "Please set DEVKITARM in your environment. export DEVKITARM=<path to>devkitARM")
 endif
@@ -75,6 +76,8 @@ CPPFILES	:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.cpp)))
 SFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
 BINFILES	:=	$(foreach dir,$(DATA),$(notdir $(wildcard $(dir)/*.*)))
 
+export PATH := $(PATH):$(TOPDIR)/makefile
+
 #---------------------------------------------------------------------------------
 # use CXX for linking C++ projects, CC for standard C
 #---------------------------------------------------------------------------------
@@ -127,7 +130,7 @@ DEPENDS	:=	$(OFILES:.o=.d)
 all	:	$(OUTPUT).cxi
 
 $(OUTPUT).cxi	:	$(OUTPUT).elf
-	@$(CURDIR)/makerom -f ncch -rsf $(OUPUT).rsf -nocodepadding -o $@ -elf $<
+	@makerom -f ncch -rsf $(OUTPUT).rsf -nocodepadding -o $@ -elf $<
 	@echo built ... $(notdir $@)
 
 $(OUTPUT).elf	:	$(OFILES)
