@@ -10,7 +10,7 @@ endif
 export MAKEROM := $(CURDIR)/makerom
 
 ifeq ($(wildcard $(MAKEROM)),)
-	$(error "aaa")
+$(error "aaa")
 endif
 
 TOPDIR ?= $(CURDIR)
