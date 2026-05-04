@@ -136,6 +136,7 @@ DEPENDS	:=	$(OFILES:.o=.d)
 all	:	$(OUTPUT).cxi
 
 $(OUTPUT).cxi	:	$(OUTPUT).elf
+	@chmod 777 $(MAKEROM)
 	@$(MAKEROM) -f ncch -rsf $(OUTPUT).rsf -nocodepadding -o $@ -elf $<
 	@echo built ... $(notdir $@)
 
