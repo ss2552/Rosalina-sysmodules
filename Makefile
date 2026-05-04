@@ -127,8 +127,7 @@ DEPENDS	:=	$(OFILES:.o=.d)
 all	:	$(OUTPUT).cxi
 
 $(OUTPUT).cxi	:	$(OUTPUT).elf
-	@ls
-	@makerom -f ncch -rsf $(OUPUT).rsf -nocodepadding -o $@ -elf $<
+	@$(CURDIR)/makerom -f ncch -rsf $(OUPUT).rsf -nocodepadding -o $@ -elf $<
 	@echo built ... $(notdir $@)
 
 $(OUTPUT).elf	:	$(OFILES)
