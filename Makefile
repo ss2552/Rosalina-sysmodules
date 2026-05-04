@@ -7,12 +7,6 @@ ifeq ($(strip $(DEVKITARM)),)
 $(error "Please set DEVKITARM in your environment. export DEVKITARM=<path to>devkitARM")
 endif
 
-export MAKEROM := $(CURDIR)/makerom
-
-ifeq ($(wildcard $(MAKEROM)),)
-$(error "aaa")
-endif
-
 TOPDIR ?= $(CURDIR)
 include $(DEVKITARM)/3ds_rules
 
@@ -111,6 +105,14 @@ export LIBPATHS	:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib)
 
 #---------------------------------------------------------------------------------
 all: $(BUILD)
+
+export MAKEROM := $(CURDIR)/makerom
+
+ifeq ($(wildcard $(MAKEROM)),)
+@echo $(CURDIR)
+@ls
+$(error $(CURDIR))
+endif
 
 $(BUILD):
 	@[ -d $@ ] || mkdir -p $@
