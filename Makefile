@@ -7,7 +7,11 @@ ifeq ($(strip $(DEVKITARM)),)
 $(error "Please set DEVKITARM in your environment. export DEVKITARM=<path to>devkitARM")
 endif
 
-export PATH := $(PATH):$(CURDIR)/makerom
+export MAKEROM := $(CURDIR)/makerom
+
+ifneq ($(wildcard $(MAKEROM),)
+	$(error aaa)
+endif
 
 TOPDIR ?= $(CURDIR)
 include $(DEVKITARM)/3ds_rules
@@ -122,7 +126,7 @@ clean:
 else
 .PHONY:	all
 
-DEPENDS	:=	$(OFILES:.o=.d
+DEPENDS	:=	$(OFILES:.o=.d)
 
 #---------------------------------------------------------------------------------
 # main targets
@@ -130,7 +134,7 @@ DEPENDS	:=	$(OFILES:.o=.d
 all	:	$(OUTPUT).cxi
 
 $(OUTPUT).cxi	:	$(OUTPUT).elf
-	@makerom -f ncch -rsf $(OUTPUT).rsf -nocodepadding -o $@ -elf $<
+	@$(MAKEROM) -f ncch -rsf $(OUTPUT).rsf -nocodepadding -o $@ -elf $<
 	@echo built ... $(notdir $@)
 
 $(OUTPUT).elf	:	$(OFILES)
