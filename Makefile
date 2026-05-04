@@ -76,8 +76,6 @@ CPPFILES	:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.cpp)))
 SFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
 BINFILES	:=	$(foreach dir,$(DATA),$(notdir $(wildcard $(dir)/*.*)))
 
-export PATH := $(PATH):$(TOPDIR)/makefile
-
 #---------------------------------------------------------------------------------
 # use CXX for linking C++ projects, CC for standard C
 #---------------------------------------------------------------------------------
@@ -123,6 +121,8 @@ else
 .PHONY:	all
 
 DEPENDS	:=	$(OFILES:.o=.d)
+
+export PATH := $(PATH):$(TOPDIR)/makerom
 
 #---------------------------------------------------------------------------------
 # main targets
