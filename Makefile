@@ -22,7 +22,7 @@ export HBLDR_DEFAULT_3DSX_TITLE_NAME ?= "hblauncher_loader"
 # DATA is a list of directories containing data files
 # INCLUDES is a list of directories containing header files
 #---------------------------------------------------------------------------------
-TARGET		:=	$(notdir $(CURDIR))
+TARGET		:=	rosalina
 BUILD		:=	build
 SOURCES		:=	source source/gdb source/menus source/plugin source/redshift
 DATA		:=	source/gdb/xml data
@@ -126,8 +126,9 @@ DEPENDS	:=	$(OFILES:.o=.d)
 #---------------------------------------------------------------------------------
 all	:	$(OUTPUT).cxi
 
-$(OUTPUT).cxi	:	$(OUTPUT).elf rosalina.rsf
-	@makerom -f ncch -rsf $(word 2,$^) -nocodepadding -o $@ -elf $<
+$(OUTPUT).cxi	:	$(OUTPUT).elf
+	@ls
+	@makerom -f ncch -rsf $(TARGET).rsf -nocodepadding -o $@ -elf $<
 	@echo built ... $(notdir $@)
 
 $(OUTPUT).elf	:	$(OFILES)
