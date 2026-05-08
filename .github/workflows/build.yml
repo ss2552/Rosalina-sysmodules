@@ -9,24 +9,10 @@ jobs:
     container: devkitpro/devkitarm
     steps:
       - uses: actions/checkout@v4
-      - name: キャッシュの復元
-        id: cache-restore
-        uses: actions/cache@v4
-        with:
-          path: build
-          key: rosalina
       - name: make
         run: make
       - uses: actions/upload-artifact@v4
         with:
           name: out
-          path: ./
+          path: ./rosalina.cxi
             
-      - name: 依存関係のインストール
-        if: steps.cache-restore.outputs.cache-hit != 'true'
-        run: npm ci
-      - name: キャッシュの保存
-        uses: actions/cache@v4
-        with:
-          path: build
-          key: rosalina
