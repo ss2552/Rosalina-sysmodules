@@ -393,7 +393,7 @@ void menuThreadMain(void)
         }
 
         if(isN3DS && !_block){
-            u32 ScreenshotCombo = KEY_ZL | KEY_ZR;
+            u32 ScreenshotCombo = KEY_L | KEY_X | KEY_B;
             if (((kHeld & ScreenshotCombo) == ScreenshotCombo) && !g_blockMenuOpen){
 
                 _block = true;
@@ -506,7 +506,7 @@ static void menuDraw(Menu *menu, u32 selected)
     {
         u8 *addr = (u8 *)&ip;
         int n = sprintf(ipBuffer, "%hhu.%hhu.%hhu.%hhu", addr[0], addr[1], addr[2], addr[3]);
-        Draw_DrawString(SCREEN_BOT_WIDTH - 10 - SPACING_X * n, 20, COLOR_WHITE, ipBuffer);
+        Draw_DrawString(SCREEN_BOT_WIDTH - 10 - SPACING_X * n, 10, COLOR_WHITE, ipBuffer);
     }
 
     if(mcuInfoRes == 0)
