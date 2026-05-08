@@ -403,9 +403,11 @@ void menuThreadMain(void)
                 MCUHWC_ReadRegister(0x28, &result, 1);
                 result = ~result;
                 MCUHWC_WriteRegister(0x28, &result, 1);
-                
 
                 
+                svcSleepThread(100 * 1000 * 1000LL);
+                
+/*
                 Draw_Lock();
                 Draw_RestoreFramebuffer();
                 Draw_FreeFramebufferCache();
@@ -419,8 +421,7 @@ void menuThreadMain(void)
                 svcFlushEntireDataCache();
                 Draw_SetupFramebuffer();
                 Draw_Unlock();
-
-                
+*/
                 
                 result = ~result;
                 MCUHWC_WriteRegister(0x28, &result, 1);
@@ -477,19 +478,11 @@ static void menuDraw(Menu *menu, u32 selected)
 {
     char versionString[16];
     s64 out;
-    u32 version, commitHash;
-    bool isRelease;
 
     Result mcuInfoRes = menuUpdateMcuInfo();
 
     svcGetSystemInfo(&out, 0x10000, 0);
     version = (u32)out;
-
-    svcGetSystemInfo(&out, 0x10000, 1);
-    commitHash = (u32)out;
-
-    svcGetSystemInfo(&out, 0x10000, 0x200);
-    isRelease = (bool)out;
 
     if(GET_VERSION_REVISION(version) == 0)
         sprintf(versionString, "v%lu.%lu", GET_VERSION_MAJOR(version), GET_VERSION_MINOR(version));
@@ -512,15 +505,12 @@ static void menuDraw(Menu *menu, u32 selected)
 
     char ipBuffer[17];
     u32 ip = socGethostid();
-    if(if != -1)
+    if(ip != -1)
     {
         u8 *addr = (u8 *)&ip;
         int n = sprintf(ipBuffer, "IP: %hhu.%hhu.%hhu.%hhu", addr[0], addr[1], addr[2], addr[3]);
         Draw_DrawString(SCREEN_BOT_WIDTH - 10 - SPACING_X * n, 20, COLOR_WHITE, ipBuffer);
     }
-
-    else
-        Draw_DrawFormattedString(SCREEN_BOT_WIDTH - 10 - SPACING_X * 15, 10, COLOR_WHITE, "%15s", "");
 
     if(mcuInfoRes == 0)
     {
@@ -531,8 +521,6 @@ static void menuDraw(Menu *menu, u32 selected)
         int n = sprintf(buf, "%lu.%lu%%", percentageInt, percentageFrac);
         Draw_DrawString(SCREEN_BOT_WIDTH - 10 - SPACING_X * n, SCREEN_BOT_HEIGHT - 20, COLOR_WHITE, buf);
     }
-    else
-        Draw_DrawFormattedString(SCREEN_BOT_WIDTH - 10 - SPACING_X * 19, SCREEN_BOT_HEIGHT - 20, COLOR_WHITE, "%19s", "");
 
     Draw_DrawFormattedString(10, SCREEN_BOT_HEIGHT - 20, COLOR_TITLE, "FW: Luma3DS %s", versionString);
 
