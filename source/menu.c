@@ -403,6 +403,9 @@ void menuThreadMain(void)
                 MCUHWC_ReadRegister(0x28, &result, 1);
                 result = ~result;
                 MCUHWC_WriteRegister(0x28, &result, 1);
+                result = ~result;
+                svcSleepThread(1000);
+                MCUHWC_WriteRegister(0x28, &result, 1);
                 mcuHwcExit();
                 
                 
