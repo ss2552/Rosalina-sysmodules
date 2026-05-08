@@ -502,7 +502,7 @@ static void menuDraw(Menu *menu, u32 selected)
 
     char ipBuffer[17];
     long ip = socGethostid();
-    if(ip < 0)
+    if(ip == -1)
     {
         u8 *addr = (u8 *)&ip;
         int n = sprintf(ipBuffer, "IP: %hhu.%hhu.%hhu.%hhu", addr[0], addr[1], addr[2], addr[3]);
@@ -515,7 +515,7 @@ static void menuDraw(Menu *menu, u32 selected)
         u32 percentageFrac = (u32)(batteryPercentage * 10.0f) % 10u;
 
         char buf[32];
-        int n = sprintf(buf, "%lu.%lu%%", percentageInt, percentageFrac);
+        int n = sprintf(buf, "Battery: %lu.%lu%%", percentageInt, percentageFrac);
         Draw_DrawString(SCREEN_BOT_WIDTH - 10 - SPACING_X * n, SCREEN_BOT_HEIGHT - 20, COLOR_WHITE, buf);
     }
 
