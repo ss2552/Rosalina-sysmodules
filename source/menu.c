@@ -382,6 +382,9 @@ void menuThreadMain(void)
             PluginLoader__UpdateMenu();
             menuShow(&rosalinaMenu);
             menuLeave();
+            
+            _block = false;
+            
         }
 
         if (saveSettingsRequest) {
