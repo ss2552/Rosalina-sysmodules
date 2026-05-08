@@ -501,7 +501,7 @@ static void menuDraw(Menu *menu, u32 selected)
     }
 
     char ipBuffer[17];
-    u32 ip = socGethostid();
+    long ip = socGethostid();
     if(ip < 0)
     {
         u8 *addr = (u8 *)&ip;
