@@ -343,6 +343,8 @@ MyThread *menuCreateThread(void)
 u32 menuCombo;
 u32 g_blockMenuOpen = 0;
 
+bool _block = false;
+
 void menuThreadMain(void)
 {
     while (!isServiceUsable("ac:u") || !isServiceUsable("hid:USER") || !isServiceUsable("gsp::Gpu") || !isServiceUsable("gsp::Lcd") || !isServiceUsable("cdc:CHK"))
@@ -387,9 +389,11 @@ void menuThreadMain(void)
             saveSettingsRequest = false;
         }
 
-        if(isN3DS){
+        if(isN3DS && !_block){
             u32 ScreenshotCombo = KEY_ZL | KEY_ZR;
             if (((kHeld & ScreenshotCombo) == ScreenshotCombo) && !g_blockMenuOpen){
+
+                _block = true;
                 
                 mcuHwcInit();
                 u8 result;
