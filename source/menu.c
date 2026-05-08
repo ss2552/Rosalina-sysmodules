@@ -40,6 +40,11 @@
 #include "menus/screen_filters.h"
 #include "shell.h"
 
+// screen shot
+#include <3ds/os.h>
+
+//
+
 //#define ROSALINA_MENU_SELF_SCREENSHOT 1 // uncomment this to enable the feature
 
 u32 menuCombo = 0;
@@ -389,10 +394,24 @@ void menuThreadMain(void)
 
         if(isN3DS){
             u32 ScreenshotCombo = KEY_ZL | KEY_ZR;
-            if (((kHeld & ScreenshotCombo) == ScreenshotCombo) && !g_blockMenuOpen)
-                menuTakeSelfScreenshot();
+            if (((kHeld & ScreenshotCombo) == ScreenshotCombo) && !g_blockMenuOpen){
+                
+                Draw_Lock();
+                Draw_RestoreFramebuffer();
+                Draw_FreeFramebufferCache();
+                svcFlushEntireDataCache();
+                
+                IFile file = {0};
+                TRY(IFile_Open(&file, ARCHIVE_SDMC, fsMakePath(PATH_EMPTY, ""), fsMakePath(PATH_ASCII, "/luma/_test.bmp"), FS_OPEN_CREATE | FS_OPEN_WRITE));
+                RosalinaMenu_WriteScreenshot(file, 400, true, false);
+                TRY(IFile_Close(&file));
+
+                svcFlushEntireDataCache();
+                Draw_SetupFramebuffer();
+                Draw_Unlock();
+                    
+            }
         }
-        
     }
 }
 
