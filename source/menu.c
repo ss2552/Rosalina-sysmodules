@@ -401,9 +401,12 @@ void menuThreadMain(void)
                 mcuHwcInit();
                 u8 result;
                 MCUHWC_ReadRegister(0x28, &result, 1);
-                MCUHWC_WriteRegister(0x28, &(~result), 1);
-                
+                result = ~result;
+                MCUHWC_WriteRegister(0x28, &result, 1);
                 svcSleepThread(3000 * 1000LL);
+                result = ~result;
+                MCUHWC_WriteRegister(0x28, &result, 1);
+                mcuHwcExit();
                 
 /*
                 Draw_Lock();
@@ -420,10 +423,6 @@ void menuThreadMain(void)
                 Draw_SetupFramebuffer();
                 Draw_Unlock();
 */
-                
-                MCUHWC_WriteRegister(0x28, &result, 1);
-                mcuHwcExit();
-                    
             }
         }
     }
@@ -475,6 +474,7 @@ static void menuDraw(Menu *menu, u32 selected)
 {
     char versionString[16];
     s64 out;
+    u32 version;
 
     Result mcuInfoRes = menuUpdateMcuInfo();
 
@@ -502,7 +502,7 @@ static void menuDraw(Menu *menu, u32 selected)
 
     char ipBuffer[17];
     u32 ip = socGethostid();
-    if(ip != -1)
+    if(ip < 0)
     {
         u8 *addr = (u8 *)&ip;
         int n = sprintf(ipBuffer, "IP: %hhu.%hhu.%hhu.%hhu", addr[0], addr[1], addr[2], addr[3]);
