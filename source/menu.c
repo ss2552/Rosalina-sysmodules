@@ -395,6 +395,17 @@ void menuThreadMain(void)
         if(isN3DS){
             u32 ScreenshotCombo = KEY_ZL | KEY_ZR;
             if (((kHeld & ScreenshotCombo) == ScreenshotCombo) && !g_blockMenuOpen){
+
+
+                
+                mcuHwcInit();
+                u8 result;
+                MCUHWC_ReadRegister(0x28, &result, 1);
+                result = ~result;
+                MCUHWC_WriteRegister(0x28, &result, 1);
+                mcuHwcExit();
+                
+                
                 
                 Draw_Lock();
                 Draw_RestoreFramebuffer();
