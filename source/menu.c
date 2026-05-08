@@ -401,11 +401,9 @@ void menuThreadMain(void)
                 mcuHwcInit();
                 u8 result;
                 MCUHWC_ReadRegister(0x28, &result, 1);
-                result = ~result;
-                MCUHWC_WriteRegister(0x28, &result, 1);
-
+                MCUHWC_WriteRegister(0x28, &(~result), 1);
                 
-                svcSleepThread(100 * 1000 * 1000LL);
+                svcSleepThread(3000 * 1000LL);
                 
 /*
                 Draw_Lock();
@@ -423,7 +421,6 @@ void menuThreadMain(void)
                 Draw_Unlock();
 */
                 
-                result = ~result;
                 MCUHWC_WriteRegister(0x28, &result, 1);
                 mcuHwcExit();
                     
