@@ -199,6 +199,8 @@ static u8 CTR_ALIGN(8) menuThreadStack[0x3000];
 static bool menuCloseRequested = false;
 
 static float batteryPercentage;
+static float batteryVoltage;
+static u8 batteryTemperature;
 
 static Result menuUpdateMcuInfo(void)
 {
@@ -223,12 +225,16 @@ static Result menuUpdateMcuInfo(void)
 
     if (R_SUCCEEDED(res))
     {
+        batteryTemperature = data[0];
 
         // The battery percentage isn't very precise... its precision ranges from 0.09% to 0.14% approx
         // Round to 0.1%
         batteryPercentage = data[1] + data[2] / 256.0f;
         batteryPercentage = (u32)((batteryPercentage + 0.05f) * 10.0f) / 10.0f;
 
+        // Round battery voltage to 0.01V
+        batteryVoltage = 0.02f * data[3];
+        batteryVoltage = (u32)((batteryVoltage + 0.005f) * 100.0f) / 100.0f;
     }
 
     // Read mcu fw version if not already done
@@ -468,13 +474,13 @@ static void menuDraw(Menu *menu, u32 selected)
         dispY += SPACING_Y;
     }
 
-    char ipBuffer[17];
-    u32 ip = socGethostid();
-    if(if != -1)
+    if(miniSocEnabled)
     {
+        char ipBuffer[17];
+        u32 ip = socGethostid();
         u8 *addr = (u8 *)&ip;
-        int n = sprintf(ipBuffer, "IP: %hhu.%hhu.%hhu.%hhu", addr[0], addr[1], addr[2], addr[3]);
-        Draw_DrawString(SCREEN_BOT_WIDTH - 10 - SPACING_X * n, 20, COLOR_WHITE, ipBuffer);
+        int n = sprintf(ipBuffer, "%hhu.%hhu.%hhu.%hhu", addr[0], addr[1], addr[2], addr[3]);
+        Draw_DrawString(SCREEN_BOT_WIDTH - 10 - SPACING_X * n, 10, COLOR_WHITE, ipBuffer);
     }
 
     else
@@ -482,17 +488,26 @@ static void menuDraw(Menu *menu, u32 selected)
 
     if(mcuInfoRes == 0)
     {
+        u32 voltageInt = (u32)batteryVoltage;
+        u32 voltageFrac = (u32)(batteryVoltage * 100.0f) % 100u;
         u32 percentageInt = (u32)batteryPercentage;
         u32 percentageFrac = (u32)(batteryPercentage * 10.0f) % 10u;
 
         char buf[32];
-        int n = sprintf(buf, "%lu.%lu%%", percentageInt, percentageFrac);
+        int n = sprintf(
+            buf, "   %02hhu\xF8""C  %lu.%02luV  %lu.%lu%%", batteryTemperature, // CP437
+            voltageInt, voltageFrac,
+            percentageInt, percentageFrac
+        );
         Draw_DrawString(SCREEN_BOT_WIDTH - 10 - SPACING_X * n, SCREEN_BOT_HEIGHT - 20, COLOR_WHITE, buf);
     }
     else
         Draw_DrawFormattedString(SCREEN_BOT_WIDTH - 10 - SPACING_X * 19, SCREEN_BOT_HEIGHT - 20, COLOR_WHITE, "%19s", "");
 
-    Draw_DrawFormattedString(10, SCREEN_BOT_HEIGHT - 20, COLOR_TITLE, "FW: Luma3DS %s", versionString);
+    if(isRelease)
+        Draw_DrawFormattedString(10, SCREEN_BOT_HEIGHT - 20, COLOR_TITLE, "Luma3DS %s", versionString);
+    else
+        Draw_DrawFormattedString(10, SCREEN_BOT_HEIGHT - 20, COLOR_TITLE, "Luma3DS %s-%08lx", versionString, commitHash);
 
     Draw_FlushFramebuffer();
 }
