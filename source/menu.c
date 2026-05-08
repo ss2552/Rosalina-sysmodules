@@ -305,7 +305,7 @@ static void menuInitializeQtm(void)
         if (R_SUCCEEDED(svcControlService(SERVICEOP_STEAL_CLIENT_SESSION, &qtmHandle, "qtm:sp")))
             *qtmGetSessionHandle() = qtmHandle;
         else
-            svcSleepThread(100 * 100 * 1000LL);
+            svcSleepThread(3 * 100 * 1000LL);
     }
 
     isQtmInitialized = qtmIsInitialized();
