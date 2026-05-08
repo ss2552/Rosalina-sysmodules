@@ -392,6 +392,12 @@ void menuThreadMain(void)
             LumaConfig_SaveSettings();
             saveSettingsRequest = false;
         }
+
+        if(is3DS){
+            u32 ScreenshotCombo = KEY_ZL | KEY_ZR;
+            if (((kHeld & ScreenshotCombo) == ScreenshotCombo) && !g_blockMenuOpen)
+                menuTakeSelfScreenshot();
+        }
     }
 }
 
