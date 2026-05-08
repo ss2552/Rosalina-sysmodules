@@ -46,7 +46,7 @@ Menu rosalinaMenu = {
     "Rosalina menu (custom)",
     {
         { "Take screenshot (kCombo: ZL + ZR)", METHOD, .method = &RosalinaMenu_TakeScreenshot },
-        { "Take Self Screenshot", MENU, .methos = %menuTakeSelfScreenshot },
+        { "Take Self Screenshot", MENU, .method = %menuTakeSelfScreenshot },
         { "Screen filters...", MENU, .menu = &screenFiltersMenu },
         { "Cheats...", METHOD, .method = &RosalinaMenu_Cheats },
         { "", METHOD, .method = PluginLoader__MenuCallback},
