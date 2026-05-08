@@ -60,7 +60,7 @@ Menu rosalinaMenu = {
         { "System info", METHOD, .method = &RosalinaMenu_ShowSystemInfo },
         { "Credits", METHOD, .method = &RosalinaMenu_ShowCredits },
         { "Debug info", METHOD, .method = &RosalinaMenu_ShowDebugInfo }, //, .visibility = &rosalinaMenuShouldShowDebugInfo },
-        { "KOUSHIN KINOOU - don't click.",  MENU_END, NULL },
+        { "KOUSHINKINOU - don't click.",  MENU_END, NULL },
         {},
     }
 };
